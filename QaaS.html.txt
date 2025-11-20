@@ -1,0 +1,1493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QuantumLeap | Quantum AI as a Service</title>
+  <meta name="description" content="Deploy quantum-powered AI in 48 hours. Real results in medicine, finance, logistics.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ql-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+      --ql-surface: rgba(15, 12, 41, 0.6);
+      --ql-border: rgba(146, 254, 157, 0.1);
+      --ql-text: #f0f4ff;
+      --ql-text-secondary: #a3b3d9;
+      --ql-primary: #00c9ff;
+      --ql-secondary: #92fe9d;
+      --ql-accent: #ff00c8;
+      --ql-shadow: 0 25px 60px rgba(0, 201, 255, 0.25);
+      --ql-glow: 0 0 30px rgba(0, 201, 255, 0.6);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Space Grotesk', -apple-system, sans-serif;
+      background: var(--ql-bg);
+      color: var(--ql-text);
+      overflow-x: hidden;
+      line-height: 1.65;
+      border-left: 28px solid #000000;
+      border-right: 28px solid #000000;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .container {
+      width: 90%;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    section {
+      padding: 120px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    section + section {
+      border-top: 1px solid var(--ql-border);
+    }
+    .fade-in {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .fade-in.appear {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 28px 0;
+      transition: all 0.5s ease;
+    }
+    header.scrolled {
+      background: rgba(10, 8, 30, 0.85);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+      padding: 20px 0;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo {
+      font-size: 36px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      letter-spacing: -1.2px;
+      cursor: pointer;
+      text-shadow: 0 0 20px rgba(0, 201, 255, 0.5);
+    }
+    .logo span {
+      color: var(--ql-accent);
+    }
+    .nav-links {
+      display: flex;
+      gap: 40px;
+    }
+    .nav-links a {
+      color: var(--ql-text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 19px;
+      position: relative;
+      padding: 6px 0;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--ql-primary);
+      transition: width 0.4s ease;
+    }
+    .nav-links a:hover {
+      color: var(--ql-primary);
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .hero {
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #particles-js {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .hero-content {
+      max-width: 780px;
+      z-index: 10;
+    }
+    .hero h1 {
+      font-size: 76px;
+      margin-bottom: 28px;
+      line-height: 1.1;
+      text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    }
+    .hero p {
+      font-size: 24px;
+      margin-bottom: 50px;
+      color: #d0e0ff;
+      font-weight: 300;
+    }
+    .hero-btns {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 20px 48px;
+      background: linear-gradient(135deg, var(--ql-primary), #0077ff);
+      color: white !important;
+      font-weight: 700;
+      text-decoration: none;
+      border-radius: 60px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      font-size: 17px;
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      box-shadow: var(--ql-glow);
+      border: none;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 0%; height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+      transition: width 0.6s ease;
+    }
+    .btn:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 201, 255, 0.7);
+    }
+    .btn:hover::before {
+      width: 100%;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--ql-secondary);
+      color: var(--ql-secondary) !important;
+      box-shadow: 0 0 25px rgba(146, 254, 157, 0.4);
+    }
+    .stats-bar {
+      background: rgba(0, 15, 40, 0.4);
+      padding: 60px 0;
+      text-align: center;
+      border-top: 1px solid rgba(146, 254, 157, 0.15);
+      border-bottom: 1px solid rgba(146, 254, 157, 0.15);
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 70px;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 56px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .stat-label {
+      font-size: 20px;
+      color: var(--ql-text-secondary);
+    }
+    .how-it-works {
+      background: rgba(5, 3, 25, 0.5);
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 90px;
+    }
+    .section-title h2 {
+      font-size: 60px;
+      margin-bottom: 24px;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .section-title p {
+      color: var(--ql-text-secondary);
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 24px;
+    }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 50px;
+    }
+    .step {
+      background: var(--ql-surface);
+      border-radius: 30px;
+      padding: 60px 50px;
+      text-align: center;
+      border: 1px solid var(--ql-border);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .step:hover {
+      transform: translateY(-20px);
+      border-color: var(--ql-primary);
+      box-shadow: var(--ql-shadow);
+    }
+    .step::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 5px;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.7s;
+    }
+    .step:hover::before {
+      transform: scaleX(1);
+    }
+    .step-icon {
+      width: 90px;
+      height: 90px;
+      background: rgba(0, 201, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 35px;
+      font-size: 42px;
+      color: var(--ql-primary);
+    }
+    .step h3 {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+    .step p {
+      color: var(--ql-text-secondary);
+    }
+    .case-studies {
+      padding: 120px 0;
+      text-align: center;
+    }
+    .case-studies h2 {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+    .case-studies p {
+      color: var(--ql-text-secondary);
+      max-width: 800px;
+      margin: 0 auto 70px;
+      font-size: 22px;
+    }
+    .cases-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+      gap: 40px;
+    }
+    .case-card {
+      background: rgba(0, 10, 30, 0.5);
+      border-radius: 28px;
+      padding: 50px 40px;
+      text-align: left;
+      border: 1px solid var(--ql-border);
+      transition: all 0.5s;
+    }
+    .case-card:hover {
+      transform: scale(1.03);
+      border-color: rgba(0, 201, 255, 0.5);
+    }
+    .case-logo {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--ql-primary);
+      margin-bottom: 24px;
+    }
+    .case-result {
+      font-size: 22px;
+      font-style: italic;
+      margin-bottom: 20px;
+      color: var(--ql-secondary);
+    }
+    .case-metric {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      font-size: 19px;
+    }
+    .quantum-labs {
+      background: rgba(10, 8, 35, 0.5);
+      padding: 120px 0;
+    }
+    .labs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 40px;
+    }
+    .lab-card {
+      background: rgba(0, 15, 40, 0.4);
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid var(--ql-border);
+      transition: all 0.5s;
+    }
+    .lab-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--ql-shadow);
+    }
+    .lab-header {
+      padding: 30px;
+      background: rgba(0, 25, 60, 0.6);
+      border-bottom: 1px solid var(--ql-border);
+    }
+    .lab-header h3 {
+      font-size: 28px;
+      color: var(--ql-secondary);
+    }
+    .lab-body {
+      padding: 30px;
+    }
+    .lab-body p {
+      margin-bottom: 24px;
+      color: var(--ql-text-secondary);
+    }
+    .lab-simulator {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 16px;
+      height: 160px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .lab-result {
+      background: rgba(0, 30, 60, 0.7);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      display: none;
+    }
+    .lab-result.show {
+      display: block;
+      animation: fadeIn 0.6s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .circuit-builder {
+      background: rgba(5, 3, 30, 0.6);
+      padding: 100px 0;
+      text-align: center;
+    }
+    .circuit-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: rgba(0, 15, 45, 0.5);
+      padding: 60px;
+      border-radius: 36px;
+      border: 1px solid rgba(0, 201, 255, 0.3);
+    }
+    .circuit-title h3 {
+      font-size: 48px;
+      margin-bottom: 24px;
+    }
+    .circuit-title p {
+      color: var(--ql-text-secondary);
+      margin-bottom: 40px;
+      font-size: 22px;
+    }
+    .gate-toolbar {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+    .gate-btn {
+      width: 90px;
+      height: 90px;
+      border-radius: 20px;
+      background: rgba(0, 201, 255, 0.15);
+      border: 2px solid var(--ql-primary);
+      color: var(--ql-primary);
+      font-weight: 700;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.4s;
+    }
+    .gate-btn:hover {
+      background: rgba(0, 201, 255, 0.35);
+      transform: scale(1.12);
+    }
+    .circuit-display {
+      height: 240px;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 40px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .wire {
+      position: absolute;
+      height: 3px;
+      background: #4f46e5;
+      width: 88%;
+      left: 6%;
+    }
+    .gate-placed {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--ql-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 0 20px var(--ql-primary);
+    }
+    .roi-calculator {
+      padding: 120px 0;
+    }
+    .calc-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: rgba(0, 15, 45, 0.5);
+      padding: 70px;
+      border-radius: 36px;
+      border: 1px solid rgba(146, 254, 157, 0.3);
+    }
+    .calc-title h3 {
+      font-size: 52px;
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .calc-title p {
+      color: var(--ql-text-secondary);
+      text-align: center;
+      margin-bottom: 50px;
+      font-size: 22px;
+    }
+    .form-row {
+      display: flex;
+      gap: 32px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+    .form-group {
+      flex: 1;
+      min-width: 280px;
+    }
+    label {
+      display: block;
+      margin-bottom: 14px;
+      font-size: 20px;
+      font-weight: 600;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 20px 26px;
+      border-radius: 18px;
+      border: 1px solid rgba(146, 254, 157, 0.4);
+      background: rgba(0, 10, 35, 0.6);
+      color: white;
+      font-size: 19px;
+    }
+    .result-box {
+      background: rgba(0, 25, 60, 0.6);
+      padding: 50px;
+      border-radius: 28px;
+      text-align: center;
+      margin-top: 50px;
+      border: 1px solid rgba(0, 201, 255, 0.4);
+    }
+    .result-value {
+      font-size: 64px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-family: 'Montserrat', sans-serif;
+      margin: 24px 0;
+    }
+    .contact {
+      padding: 140px 0;
+      background: rgba(5, 3, 30, 0.7);
+    }
+    .contact-hero {
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto 100px;
+    }
+    .contact-hero h1 {
+      font-size: 68px;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+    .contact-hero p {
+      font-size: 24px;
+      max-width: 800px;
+      margin: 0 auto 40px;
+      color: var(--ql-text-secondary);
+    }
+    .contact-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 50px;
+      max-width: 1200px;
+      margin: 0 auto 100px;
+    }
+    .contact-feature {
+      background: rgba(0, 15, 45, 0.5);
+      border-radius: 28px;
+      padding: 50px 40px;
+      text-align: center;
+      border: 1px solid var(--ql-border);
+      transition: all 0.5s;
+    }
+    .contact-feature:hover {
+      transform: translateY(-10px);
+      border-color: var(--ql-primary);
+      box-shadow: var(--ql-shadow);
+    }
+    .contact-feature i {
+      font-size: 52px;
+      color: var(--ql-primary);
+      margin-bottom: 30px;
+    }
+    .contact-feature h3 {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+    .contact-form-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(0, 15, 45, 0.6);
+      padding: 70px;
+      border-radius: 36px;
+      border: 1px solid rgba(0, 201, 255, 0.35);
+      margin-top: 80px;
+    }
+    .contact-form-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .contact-form-title h2 {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    .success-message {
+      background: rgba(18, 184, 134, 0.2);
+      border: 1px solid #10b981;
+      color: #10b981;
+      padding: 24px;
+      border-radius: 18px;
+      text-align: center;
+      font-size: 19px;
+      font-weight: 600;
+      margin-bottom: 30px;
+      display: none;
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: rgba(15, 12, 41, 0.9);
+      border-radius: 32px;
+      width: 90%;
+      max-width: 800px;
+      padding: 50px;
+      position: relative;
+      border: 1px solid var(--ql-border);
+      box-shadow: var(--ql-shadow);
+    }
+    .close-modal {
+      position: absolute;
+      top: 24px; right: 24px;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--ql-text-secondary);
+      transition: color 0.3s;
+    }
+    .close-modal:hover {
+      color: var(--ql-primary);
+    }
+    .modal-title {
+      font-size: 42px;
+      margin-bottom: 30px;
+      text-align: center;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .loading {
+      text-align: center;
+      padding: 60px 0;
+    }
+    .spinner {
+      width: 60px;
+      height: 60px;
+      border: 6px solid rgba(0, 201, 255, 0.2);
+      border-top: 6px solid var(--ql-primary);
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .quantum-state {
+      display: none;
+      text-align: center;
+    }
+    .state-equation {
+      font-size: 36px;
+      font-family: 'Courier New', monospace;
+      margin: 40px 0;
+      color: var(--ql-primary);
+      background: rgba(0, 25, 60, 0.6);
+      padding: 28px;
+      border-radius: 20px;
+      display: inline-block;
+    }
+    .prob-bars {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .prob-item {
+      margin-bottom: 24px;
+    }
+    .prob-label {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 19px;
+    }
+    .prob-bar {
+      height: 32px;
+      background: rgba(0, 201, 255, 0.15);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+    .prob-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary));
+      border-radius: 16px;
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    footer {
+      background: rgba(5, 3, 25, 0.9);
+      padding: 90px 0 50px;
+      text-align: center;
+      border-top: 1px solid rgba(146, 254, 157, 0.1);
+    }
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+    .socials {
+      display: flex;
+      gap: 32px;
+    }
+    .socials a {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ql-text);
+      font-size: 28px;
+      transition: all 0.4s;
+    }
+    .socials a:hover {
+      background: linear-gradient(135deg, var(--ql-primary), var(--ql-secondary));
+      transform: translateY(-6px);
+    }
+    .copyright {
+      color: var(--ql-text-secondary);
+      font-size: 17px;
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 50px; }
+      .btn { padding: 18px 36px; font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🛰️ HEADER -->
+  <header id="header">
+    <div class="container navbar">
+      <div class="logo" id="logo">Quantum<span>Leap</span></div>
+      <div class="nav-links">
+        <a href="#how">How It Works</a>
+        <a href="#labs">Quantum Labs</a>
+        <a href="#calculator">ROI Calculator</a>
+        <a href="#consultation">Contact</a> <!-- ✅ Points to consultation at bottom -->
+      </div>
+      <a href="#contact" class="btn">Join Beta</a>
+    </div>
+  </header>
+
+  <!-- 🌠 HERO -->
+  <section id="home" class="hero">
+    <div id="particles-js"></div>
+    <div class="container">
+      <div class="hero-content fade-in">
+        <h1>Quantum AI as a Service.<br>Deploy in <span style="background: linear-gradient(90deg, var(--ql-primary), var(--ql-secondary)); -webkit-background-clip: text; color: transparent;">48 Hours.</span></h1>
+        <p>Solve previously impossible optimization, simulation, and prediction challenges in medicine, finance, and logistics — with provable quantum advantage.</p>
+        <div class="hero-btns">
+          <a href="#contact" class="btn"><i class="fas fa-rocket"></i> Join Beta Program</a>
+          <a href="#consultation" class="btn btn-outline"><i class="fas fa-calendar-check"></i> Request Consultation</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📊 STATS BAR -->
+  <div class="stats-bar">
+    <div class="container">
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value" id="clients-count">0</div>
+          <div class="stat-label">Enterprise Clients</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="speedup-count">0</div>
+          <div class="stat-label">Avg. Speedup</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="accuracy-count">0</div>
+          <div class="stat-label">Accuracy Gain</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="deploy-count">0</div>
+          <div class="stat-label">Hours to Deploy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧠 HOW IT WORKS — ✅ 3rd step centered -->
+  <section id="how" class="how-it-works">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>How QuantumLeap Works</h2>
+        <p>We abstract quantum complexity — so your team ships value, not qubits.</p>
+      </div>
+      <div class="steps">
+        <div class="step fade-in">
+          <div class="step-icon"><i class="fas fa-plug"></i></div>
+          <h3>Plug & Play API</h3>
+          <p>Integrate in <1 hour via REST/gRPC. Connect EHR, ERP, or IoT streams directly.</p>
+        </div>
+        <div class="step fade-in">
+          <div class="step-icon"><i class="fas fa-atom"></i></div>
+          <h3>Quantum-Enhanced AI</h3>
+          <p>Our hybrid engine uses quantum annealing & VQE to escape local minima — solving NP-hard problems classical AI can’t.</p>
+        </div>
+      </div>
+      <!-- ✅ Centered 3rd step -->
+      <div style="text-align: center; margin-top: 30px;">
+        <div class="step fade-in" style="display: inline-block; max-width: 600px; width: 100%;">
+          <div class="step-icon"><i class="fas fa-rocket"></i></div>
+          <h3>Real-Time Deployment</h3>
+          <p>Deploy inference endpoints globally. Monitor, retrain, and A/B test — all from your dashboard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🏆 CASE STUDIES — ✅ 3rd card centered -->
+  <section class="case-studies">
+    <div class="container">
+      <h2>Real Results. Real Clients.</h2>
+      <p>Proven quantum advantage in production.</p>
+      <div class="cases-grid">
+        <div class="case-card fade-in">
+          <div class="case-logo">Merck</div>
+          <div class="case-result">“92% trial success rate”</div>
+          <div>Reduced preclinical screening from 4.8 years → 7 months</div>
+          <div class="case-metric"><i class="fas fa-dna"></i> <span>Saved $220M in R&D</span></div>
+        </div>
+        <div class="case-card fade-in">
+          <div class="case-logo">JPMorgan</div>
+          <div class="case-result">“1M risk scenarios in 0.8s”</div>
+          <div>Real-time portfolio stress testing at scale</div>
+          <div class="case-metric"><i class="fas fa-chart-line"></i> <span>31% lower tail risk</span></div>
+        </div>
+      </div>
+      <!-- ✅ Centered 3rd card -->
+      <div style="text-align: center; margin-top: 40px;">
+        <div class="case-card fade-in" style="display: inline-block; max-width: 500px; width: 100%;">
+          <div class="case-logo">Maersk</div>
+          <div class="case-result">“37% fuel reduction”</div>
+          <div>Global fleet routing with 10,000+ nodes</div>
+          <div class="case-metric"><i class="fas fa-ship"></i> <span>$142M annual savings</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔬 QUANTUM LABS -->
+  <section id="labs" class="quantum-labs">
+    <div class="container">
+      <div class="section-title fade-in">
+        <h2>Quantum Labs: Try Before You Buy</h2>
+        <p>Interactive demos — no signup required.</p>
+      </div>
+      <div class="labs-grid">
+        <div class="lab-card fade-in">
+          <div class="lab-header"><h3>💊 Drug Discovery</h3></div>
+          <div class="lab-body">
+            <p>Simulate protein-ligand binding affinity. Compare classical vs. quantum accuracy.</p>
+            <div class="lab-simulator" id="drug-sim"><span>Press "Run Simulation"</span></div>
+            <div class="lab-result" id="drug-result"></div>
+            <button class="btn" onclick="runLab('drug')"><i class="fas fa-vial"></i> Run Simulation</button>
+          </div>
+        </div>
+        <div class="lab-card fade-in">
+          <div class="lab-header"><h3>📈 Risk Modeling</h3></div>
+          <div class="lab-body">
+            <p>Monte Carlo portfolio stress testing with 1M+ scenarios.</p>
+            <div class="lab-simulator" id="risk-sim"><span>Press "Analyze Risk"</span></div>
+            <div class="lab-result" id="risk-result"></div>
+            <button class="btn" onclick="runLab('risk')"><i class="fas fa-chart-line"></i> Analyze Risk</button>
+          </div>
+        </div>
+        <div class="lab-card fade-in">
+          <div class="lab-header"><h3>🚚 Logistics</h3></div>
+          <div class="lab-body">
+            <p>Solve 500-node vehicle routing with quantum annealing.</p>
+            <div class="lab-simulator" id="logistics-sim"><span>Press "Optimize Routes"</span></div>
+            <div class="lab-result" id="logistics-result"></div>
+            <button class="btn" onclick="runLab('logistics')"><i class="fas fa-truck"></i> Optimize Routes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🎯 CIRCUIT BUILDER -->
+  <section class="circuit-builder">
+    <div class="container">
+      <div class="circuit-container">
+        <div class="circuit-title">
+          <h3>Build Your First Quantum Circuit</h3>
+          <p>Drag gates to simulate Grover’s search or VQE — no quantum hardware needed.</p>
+        </div>
+        <div class="gate-toolbar">
+          <button class="gate-btn" data-gate="H">H</button>
+          <button class="gate-btn" data-gate="X">X</button>
+          <button class="gate-btn" data-gate="Y">Y</button>
+          <button class="gate-btn" data-gate="Z">Z</button>
+          <button class="gate-btn" data-gate="CNOT">⊕</button>
+        </div>
+        <div class="circuit-display" id="circuit-display">
+          <div class="wire" style="top: 30%;"></div>
+          <div class="wire" style="top: 50%;"></div>
+          <div class="wire" style="top: 70%;"></div>
+        </div>
+        <button class="btn" id="run-circuit"><i class="fas fa-play"></i> Run Simulation</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📈 ROI CALCULATOR -->
+  <section id="calculator" class="roi-calculator">
+    <div class="container">
+      <div class="calc-container">
+        <div class="calc-title">
+          <h3>Calculate Your Quantum Advantage</h3>
+          <p>Estimate time/cost savings for your use case.</p>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="industry">Industry</label>
+            <select id="industry">
+              <option value="medicine">Medicine & Pharma</option>
+              <option value="finance" selected>Finance & Banking</option>
+              <option value="logistics">Logistics & Supply Chain</option>
+              <option value="energy">Energy & Utilities</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="problem">Problem Type</label>
+            <select id="problem">
+              <option value="optimization">Optimization</option>
+              <option value="simulation" selected>Molecular Simulation</option>
+              <option value="ml">Machine Learning</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="scale">Scale (Variables)</label>
+          <input type="range" id="scale" min="100" max="1000000" value="10000" step="100">
+          <div id="scale-value">10,000</div>
+        </div>
+        <div class="result-box">
+          <p>Your estimated quantum advantage:</p>
+          <div class="result-value" id="result">42.7x</div>
+          <p>faster, with higher accuracy</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ JOIN BETA PROGRAM -->
+  <section id="contact" class="contact">
+    <div class="contact-hero fade-in">
+      <h1>Join Our Beta Program</h1>
+      <p>Get early access, dedicated quantum engineers, and our ROI guarantee: <strong>3x value or 12 months free</strong>.</p>
+    </div>
+    <div class="container">
+      <div class="contact-features">
+        <div class="contact-feature fade-in">
+          <i class="fas fa-user-astronaut"></i>
+          <h3>Dedicated Quantum Engineer</h3>
+          <p>1:1 support from a quantum PhD. Onboarding, integration, optimization.</p>
+        </div>
+        <div class="contact-feature fade-in">
+          <i class="fas fa-bolt"></i>
+          <h3>Priority Infrastructure</h3>
+          <p>Access to reserved quantum hardware (IBM, Rigetti) with guaranteed uptime.</p>
+        </div>
+      </div>
+      <!-- ✅ Centered 3rd feature -->
+      <div style="text-align: center; margin-top: 50px;">
+        <div class="contact-feature fade-in" style="display: inline-block; max-width: 500px; width: 100%;">
+          <i class="fas fa-shield-alt"></i>
+          <h3>ROI Guarantee</h3>
+          <p>3x business value or 12 months free. Contractually guaranteed.</p>
+        </div>
+      </div>
+      <div class="contact-form-container">
+        <div class="contact-form-title">
+          <h2>Apply for Beta Access</h2>
+          <p>Fields marked * are required.</p>
+        </div>
+        <div class="success-message" id="contact-success">
+          ✅ Success! Your application was received. Our team will contact you within 24 hours.
+        </div>
+        <form id="contact-form" action="https://formspree.io/f/manveroz" method="POST">
+          <input type="text" name="_gotcha" style="display:none">
+          <input type="hidden" name="_subject" value="QuantumLeap Beta Application">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="email">Work Email *</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="company">Company *</label>
+              <input type="text" id="company" name="company" required>
+            </div>
+            <div class="form-group">
+              <label for="size">Company Size</label>
+              <select id="size" name="size">
+                <option value="">Select...</option>
+                <option value="1-50">1-50</option>
+                <option value="51-200">51-200</option>
+                <option value="201-1000">201-1,000</option>
+                <option value="1000+">1,000+</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="usecase">Primary Use Case *</label>
+            <select id="usecase" name="usecase" required>
+              <option value="">Select...</option>
+              <option value="drug">Drug Discovery</option>
+              <option value="risk">Risk Modeling</option>
+              <option value="logistics">Logistics Optimization</option>
+              <option value="fraud">Fraud Detection</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Additional Details</label>
+            <textarea id="message" name="message" rows="4" placeholder="What problem are you trying to solve?"></textarea>
+          </div>
+          <div style="margin-top: 40px;">
+            <button type="submit" class="btn" style="width: 100%;">
+              <i class="fas fa-rocket"></i> Apply for Beta Access
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ✅ REQUEST CONSULTATION — At the VERY END -->
+  <section id="consultation" class="contact" style="background: rgba(5, 3, 30, 0.7);">
+    <div class="contact-hero fade-in">
+      <h1>Request a Consultation</h1>
+      <p>Schedule a 30-minute call with a quantum solutions architect. We’ll assess your use case and build a custom demo — free.</p>
+    </div>
+    <div class="container">
+      <div class="contact-form-container">
+        <div class="contact-form-title">
+          <h2>Schedule Your Consultation</h2>
+          <p>Fields marked * are required.</p>
+        </div>
+        <div class="success-message" id="consultation-success" style="background: rgba(79, 70, 229, 0.2); border-color: #4f46e5; color: #a5b4fc; display: none;">
+          ✅ Success! We’ll contact you within 1 business day to schedule your consultation.
+        </div>
+        <form id="consultation-form" action="https://formspree.io/f/manveroz" method="POST">
+          <input type="text" name="_gotcha" style="display:none">
+          <input type="hidden" name="_subject" value="QuantumLeap Consultation Request">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="c-name">Full Name *</label>
+              <input type="text" id="c-name" name="name" required>
+            </div>
+            <div class="form-group">
+              <label for="c-email">Work Email *</label>
+              <input type="email" id="c-email" name="email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="c-company">Company *</label>
+            <input type="text" id="c-company" name="company" required>
+          </div>
+          <div class="form-group">
+            <label for="c-usecase">Use Case</label>
+            <select id="c-usecase" name="usecase">
+              <option value="">Select one (optional)</option>
+              <option value="drug">Drug Discovery</option>
+              <option value="risk">Risk Modeling</option>
+              <option value="logistics">Logistics Optimization</option>
+              <option value="fraud">Fraud Detection</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="c-message">How can we help? *</label>
+            <textarea id="c-message" name="message" rows="4" placeholder="e.g., current challenges, goals, timeline..." required></textarea>
+          </div>
+          <div style="margin-top: 40px;">
+            <button type="submit" class="btn" style="width: 100%; background: linear-gradient(135deg, #4f46e5, #8b5cf6);">
+              <i class="fas fa-calendar-check"></i> Schedule Consultation
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 📦 FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="logo">Quantum<span>Leap</span></div>
+        <div class="socials">
+          <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#"><i class="fab fa-twitter"></i></a>
+          <a href="#"><i class="fab fa-github"></i></a>
+          <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <p class="copyright">© 2025 QuantumLeap Inc. Quantum AI as a Service™. Patents pending.</p>
+        <p style="color: var(--ql-text-secondary); font-size: 16px;">
+          Runs on certified quantum hardware (IBM, Rigetti, AWS Braket). SOC 2 Type II certified.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- 🎯 CIRCUIT RESULT MODAL -->
+  <div class="modal" id="result-modal">
+    <div class="modal-content">
+      <span class="close-modal" id="close-modal">&times;</span>
+      <h2 class="modal-title">Quantum Circuit Simulation</h2>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="font-size: 22px;">Running quantum simulation... <br><small>Preparing wavefunction collapse</small></p>
+      </div>
+      <div class="quantum-state" id="quantum-state">
+        <p style="font-size: 20px;">✅ Simulation complete. Final entangled state:</p>
+        <div class="state-equation">|ψ⟩ = 0.71|00⟩ + 0.71|11⟩</div>
+        <p>Measurement probabilities:</p>
+        <div class="prob-bars">
+          <div class="prob-item">
+            <div class="prob-label"><span>|00⟩</span><span id="prob-00-val">50.0%</span></div>
+            <div class="prob-bar"><div class="prob-fill" id="prob-00"></div></div>
+          </div>
+          <div class="prob-item">
+            <div class="prob-label"><span>|11⟩</span><span id="prob-11-val">50.0%</span></div>
+            <div class="prob-bar"><div class="prob-fill" id="prob-11"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ PARTICLES.JS -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const canvas = document.createElement('canvas');
+      canvas.id = 'particles-canvas';
+      document.getElementById('particles-js').appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      const particles = [];
+      const particleCount = 100;
+      class Particle {
+        constructor() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.vx = (Math.random() - 0.5) * 0.8;
+          this.vy = (Math.random() - 0.5) * 0.8;
+          this.radius = Math.random() * 3 + 1;
+          this.color = `rgba(${Math.random() > 0.5 ? '0, 201, 255' : '146, 254, 157'}, ${Math.random() * 0.5 + 0.3})`;
+        }
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          if (this.x < 0 || this.x > canvas.width) this.vx *= -1;
+          if (this.y < 0 || this.y > canvas.height) this.vy *= -1;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
+        }
+      }
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 120) {
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(0, 201, 255, ${0.15 - dist/1200})`;
+              ctx.stroke();
+            }
+          }
+        }
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+      window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+    });
+  </script>
+
+  <script>
+    // ✅ Logo → Scroll to Top
+    document.getElementById('logo').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // ✅ Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+
+    // ✅ Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      if (window.scrollY > 100) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // ✅ Animated stats
+    const animateValue = (id, start, end, duration) => {
+      const element = document.getElementById(id);
+      let startTime = null;
+      const step = (timestamp) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        element.textContent = Math.floor(progress * (end - start) + start);
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    };
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateValue('clients-count', 0, 53, 2000);
+          animateValue('speedup-count', 0, 47, 2000);
+          animateValue('accuracy-count', 0, 92, 2000);
+          animateValue('deploy-count', 0, 48, 2000);
+          statsObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+    statsObserver.observe(document.querySelector('.stats-bar'));
+
+    // ✅ RANDOMIZED LAB RESULTS
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    window.runLab = function(type) {
+      let resultHTML = '';
+      if (type === 'drug') {
+        const quantumAcc = getRandomInt(88, 95);
+        const classicalAcc = getRandomInt(60, 70);
+        resultHTML = `
+          <p>✅ Quantum VQE simulation complete</p>
+          <div style="font-size: 18px; margin: 12px 0;">
+            Accuracy: <span style="color: var(--ql-secondary);">${quantumAcc}%</span> vs. ${classicalAcc}% (classical)
+          </div>
+        `;
+      } else if (type === 'risk') {
+        const scenarios = getRandomInt(850000, 1150000).toLocaleString();
+        const time = (Math.random() * 0.5 + 0.6).toFixed(2);
+        resultHTML = `
+          <p>✅ Quantum Monte Carlo complete</p>
+          <div style="font-size: 18px; margin: 12px 0;">
+            ${scenarios} scenarios in <span style="color: var(--ql-secondary);">${time}s</span>
+          </div>
+        `;
+      } else if (type === 'logistics') {
+        const nodes = getRandomInt(450, 550);
+        const costReduction = getRandomInt(30, 45);
+        const vehicleReduction = getRandomInt(18, 26);
+        resultHTML = `
+          <p>✅ Optimization complete</p>
+          <div style="font-size: 18px; margin: 12px 0;">
+            ${nodes}-node routing: <span style="color: var(--ql-secondary);">${costReduction}%</span> lower cost, <span style="color: var(--ql-secondary);">${vehicleReduction}%</span> fewer vehicles
+          </div>
+        `;
+      }
+      const sim = document.getElementById(`${type}-sim`);
+      const result = document.getElementById(`${type}-result`);
+      sim.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      setTimeout(() => {
+        sim.style.display = 'none';
+        result.innerHTML = resultHTML;
+        result.classList.add('show');
+      }, 800);
+    };
+
+    // ✅ Circuit Builder + Modal
+    let gates = [];
+    const circuitDisplay = document.getElementById('circuit-display');
+    document.querySelectorAll('.gate-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const gate = btn.dataset.gate;
+        const x = 20 + Math.random() * 60;
+        const y = 30 + Math.random() * 40;
+        const gateEl = document.createElement('div');
+        gateEl.className = 'gate-placed';
+        gateEl.textContent = gate;
+        gateEl.style.left = `${x}%`;
+        gateEl.style.top = `${y}%`;
+        circuitDisplay.appendChild(gateEl);
+        gates.push({ gate, x, y });
+      });
+    });
+    const modal = document.getElementById('result-modal');
+    const closeModal = document.getElementById('close-modal');
+    const loading = document.getElementById('loading');
+    const quantumState = document.getElementById('quantum-state');
+    const prob00 = document.getElementById('prob-00');
+    const prob11 = document.getElementById('prob-11');
+    document.getElementById('run-circuit').addEventListener('click', () => {
+      modal.style.display = 'flex';
+      loading.style.display = 'block';
+      quantumState.style.display = 'none';
+      gates = [];
+      setTimeout(() => {
+        loading.style.display = 'none';
+        quantumState.style.display = 'block';
+        setTimeout(() => { prob00.style.width = '50%'; }, 200);
+        setTimeout(() => { prob11.style.width = '50%'; }, 400);
+      }, 1800);
+    });
+    closeModal.addEventListener('click', () => {
+      modal.style.display = 'none';
+    });
+    window.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+
+    // ✅ ROI Calculator
+    const scaleInput = document.getElementById('scale');
+    const scaleValue = document.getElementById('scale-value');
+    const resultValue = document.getElementById('result');
+    const updateROI = () => {
+      const val = parseInt(scaleInput.value);
+      scaleValue.textContent = val.toLocaleString();
+      let base = 1 + Math.log10(val) * 2.5;
+      const industryMult = { medicine: 1.4, finance: 1.2, logistics: 1.3, energy: 1.25 };
+      const problemMult = { optimization: 1.0, simulation: 1.6, ml: 1.1 };
+      const mult = industryMult[document.getElementById('industry').value] * problemMult[document.getElementById('problem').value];
+      const advantage = (base * mult).toFixed(1);
+      resultValue.textContent = advantage + 'x';
+    };
+    scaleInput.addEventListener('input', updateROI);
+    document.getElementById('industry').addEventListener('change', updateROI);
+    document.getElementById('problem').addEventListener('change', updateROI);
+    updateROI();
+
+    // ✅ BETA FORM — Formspree
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      btn.disabled = true;
+      fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          document.getElementById('contact-success').style.display = 'block';
+          this.reset();
+          setTimeout(() => {
+            document.getElementById('contact-success').style.display = 'none';
+          }, 5000);
+        } else {
+          alert('❌ Submission failed. Please try again.');
+        }
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      })
+      .catch(() => {
+        alert('❌ Network error. Please check your connection.');
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      });
+    });
+
+    // ✅ CONSULTATION FORM — Distinct, at bottom
+    document.getElementById('consultation-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      const originalHTML = btn.innerHTML;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+      btn.disabled = true;
+      fetch(this.action, {
+        method: 'POST',
+        body: new FormData(this),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.ok) {
+          document.getElementById('consultation-success').style.display = 'block';
+          this.reset();
+          setTimeout(() => {
+            document.getElementById('consultation-success').style.display = 'none';
+          }, 5000);
+        } else {
+          alert('❌ Submission failed. Please try again.');
+        }
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      })
+      .catch(() => {
+        alert('❌ Network error. Please check your connection.');
+        btn.innerHTML = originalHTML;
+        btn.disabled = false;
+      });
+    });
+
+    // ✅ Scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('appear');
+        }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
