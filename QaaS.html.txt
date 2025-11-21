@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
+/* ✅ FIX: Prevent header overlap on all screens */
+body {
+  padding-top: 120px; /* = header height + safe margin */
+}
+@media (max-width: 768px) {
+  body { padding-top: 90px; }
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 8vw, 4.75rem);
+}
     :root {
       --ql-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       --ql-surface: rgba(15, 12, 41, 0.6);
@@ -27,8 +37,8 @@
       color: var(--ql-text);
       overflow-x: hidden;
       line-height: 1.65;
-      border-left: 28px solid #000000;
-      border-right: 28px solid #000000;
+      border-left: 1px solid #000000;
+      border-right: 1px solid #000000;
     }
     h1, h2, h3, h4, h5, h6 {
       font-family: 'Montserrat', sans-serif;
@@ -145,7 +155,8 @@
     }
     .hero p {
       font-size: 24px;
-      margin-bottom: 50px;
+      margin: 20px;
+      margin-bottom: 20px;
       color: #d0e0ff;
       font-weight: 300;
     }
@@ -153,6 +164,7 @@
       display: flex;
       gap: 28px;
       flex-wrap: wrap;
+      margin-bottom: 30px;
     }
     .btn {
       display: inline-flex;
@@ -1142,10 +1154,10 @@
       <div class="footer-content">
         <div class="logo">Quantum<span>Leap</span></div>
         <div class="socials">
-          <a href="#"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#"><i class="fab fa-twitter"></i></a>
-          <a href="#"><i class="fab fa-github"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
+          <a href="https://www.linkedin.com/in/quantum-leap-94150a392"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://x.com/QuantumLeap949"><i class="fab fa-twitter"></i></a>
+          <a href="https://github.com/quantumleap949-web"><i class="fab fa-github"></i></a>
+          <a href="https://www.youtube.com/@QuantumLeap-r6g5g"><i class="fab fa-youtube"></i></a>
         </div>
         <p class="copyright">© 2025 QuantumLeap Inc. Quantum AI as a Service™. Patents pending.</p>
         <p style="color: var(--ql-text-secondary); font-size: 16px;">
